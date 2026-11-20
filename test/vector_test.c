@@ -23,9 +23,9 @@
 	size_t (dest); 						\
 	int_vector_write_capacity_into((vector_name), &(dest)); \
 
-#define get_item(vector_name, dest) 				\
-	int (dest); 						\
-	int_vector_write_item_into((vector_name), &(dest)); 	\
+#define get_item(vector_name, index, dest) 				\
+	int (dest); 							\
+	int_vector_write_item_into((vector_name), index, &(dest)); 	\
 
 #define pop(vector_name, dest) 			\
 	int (dest); 				\
@@ -119,6 +119,12 @@ Test(popping, errors_on_retrieval_of_smaller_item)
 	pop(vec, popped);
 
 	cr_assert_eq(popped, 2);
+
+	int dest;
+
+	int ret = int_vector_write_item_into(vec, 1, &dest);
+
+	cr_assert_eq(ret, 1);
 }
 
 #undef test_vector
