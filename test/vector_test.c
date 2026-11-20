@@ -119,8 +119,6 @@ Test(popping, errors_on_retrieval_of_smaller_item)
 	pop(vec, popped);
 
 	cr_assert_eq(popped, 2);
-
-	cr_assert_eq(0, 1);
 }
 
 #undef test_vector
