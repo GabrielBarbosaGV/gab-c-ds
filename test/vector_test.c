@@ -10,26 +10,26 @@
 		cr_assert_eq((ret_name), 0, "Expected return value to be 0 (success)"); \
 	} while (0) 									\
 
-#define test_vector(capacity, capacity_name, vector_name) \
-	size_t (capacity_name) = (capacity); \
-	IntVector (vector_name) = int_vector_create((capacity)); \
+#define test_vector(capacity, capacity_name, vector_name) 		\
+	size_t (capacity_name) = (capacity); 				\
+	IntVector (vector_name) = int_vector_create((capacity)); 	\
 
-#define append(vector_name, val) \
-	do { \
-		int_vector_append((vector_name), (val)); \
-	} while (0) \
+#define append(vector_name, val) 				\
+	do { 							\
+		int_vector_append((vector_name), (val)); 	\
+	} while (0) 						\
 
-#define get_capacity(vector_name, dest) \
-	size_t (dest); \
+#define get_capacity(vector_name, dest) 			\
+	size_t (dest); 						\
 	int_vector_write_capacity_into((vector_name), &(dest)); \
 
-#define get_item(vector_name, dest) \
-	int (dest); \
-	int_vector_write_item_into((vector_name), &(dest));
+#define get_item(vector_name, dest) 				\
+	int (dest); 						\
+	int_vector_write_item_into((vector_name), &(dest)); 	\
 
-#define pop(vector_name, dest) \
-	int (dest); \
-	int_vector_pop((vector_name), &(dest));
+#define pop(vector_name, dest) 			\
+	int (dest); 				\
+	int_vector_pop((vector_name), &(dest)); \
 
 Test(empty, writes_initial_capacity)
 {
