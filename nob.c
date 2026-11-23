@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
 
 	nob_cmd_append(
 		&test_build_cmd,
-		"vector.c",
 		"-w",
 		"-std=c17",
 		"-lcriterion",
@@ -43,7 +42,6 @@ int main(int argc, char** argv) {
 
 	nob_cmd_append(
 		&rerun_build,
-		"vector.c",
 		"-Wall",
 		"-Wextra",
 		"-std=c17",
