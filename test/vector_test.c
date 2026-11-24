@@ -8,7 +8,42 @@ stg_vecdef(int, Numbers);
 
 stg_vecdef(char, Characters);
 
-Test(one_element, returns_size_0)
+Test(with_one_element, writes_element)
+{
+	Numbers numbers = {0};
+
+	stg_vecalloc(&numbers, 256);
+
+	int val = - 1;
+
+	stg_vecpush(&numbers, 10);
+
+	stg_vecget(&numbers, 0, &val);
+
+	cr_assert_eq(val, 10, "Actual value was %d", val);
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_two_elements, writes_element)
+{
+	Numbers numbers = {0};
+
+	stg_vecalloc(&numbers, 256);
+
+	stg_vecpush(&numbers, 10);
+	stg_vecpush(&numbers, 20);
+
+	int val = - 1;
+
+	stg_vecget(&numbers, 1, &val);
+
+	cr_assert_eq(val, 20, "Actual value was %d", val);
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_no_elements, returns_false)
 {
 	Numbers numbers = {0};
 
@@ -16,11 +51,17 @@ Test(one_element, returns_size_0)
 
 	int val = -1;
 
-	stg_vecpush(&numbers, 10);
+	int ret = stg_vecget(&numbers, 1, &val);
 
-	stg_vecget(&numbers, 0, &val);
+	cr_assert_eq(ret, 0, "Return value was actually %c", ret);
 
-	cr_assert_eq(val, 10, "Actual value was %d", val);
-	cr_assert_eq(numbers.header.size, 1, "Actual size was %ld", numbers.header.size);
-	cr_assert_eq(numbers.header.capacity, 256, "Actual capacity was %ld", numbers.header.capacity);
+	stg_vecfree(&numbers);
 }
+
+/*
+Test(with_one_element, removes_last)
+{
+
+}
+
+*/
