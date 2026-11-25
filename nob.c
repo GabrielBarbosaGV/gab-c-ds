@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
 		"-w",
 		"-std=c17",
 		"-lcriterion",
+		"-fsanitize=address",
 		"-o",
 		"tests"
 	);
@@ -31,7 +32,6 @@ int main(int argc, char** argv) {
 
 	nob_cmd_append(
 		&test_run_cmd,
-		"valgrind",
 		"./tests",
 	);
 

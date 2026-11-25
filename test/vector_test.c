@@ -13,8 +13,12 @@ stg_vecdef(char, Characters);
 	stg_vecalloc(&(name), (initial_capacity))
 
 #define getinto(name, index, dest)		\
-	int (dest) = -1;		\
+	int (dest) = -1;			\
 	stg_vecget((name), index, &(dest))	
+
+#define reminto(name, dest)		\
+	int (dest) = -1;		\
+	stg_vecremlast((name), &(dest))
 
 Test(with_one_element, writes_element)
 {
@@ -77,13 +81,52 @@ Test(with_one_element, writes_last_value_with_remove_last)
 
 	stg_vecpush(&numbers, 42);
 
-	int val = -1;
-
-	stg_vecremlast(&numbers, &val);
+	reminto(&numbers, val);
 
 	cr_assert_eq(val, 42, "Actual written value was %d", val);
 
 	stg_vecfree(&numbers);
 }
 
+Test(with_two_elements, writes_last_value_with_remove_last)
+{
+	newnums(numbers, 256);
+
+	stg_vecpush(&numbers, 24);
+	stg_vecpush(&numbers, 42);
+
+	reminto(&numbers, val);
+
+	cr_assert_eq(val, 42, "Actual writen value was %d", val);
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_one_element, increases_capacity)
+{
+	newnums(numbers, 0);
+
+	stg_vecpush(&numbers, 100);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 1, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_two_elements, increases_capacity)
+{
+	newnums(numbers, 1);
+
+	stg_vecpush(&numbers, 100);
+	stg_vecpush(&numbers, 200);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 2, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+
+	stg_vecfree(&numbers);
+}
+
 #undef newnums
+
+#undef getinto
+
+#undef reminto
