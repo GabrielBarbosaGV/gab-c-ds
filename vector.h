@@ -20,7 +20,7 @@ typedef struct {
 			1													\
 )
 
-#define __stg_vecputend(vec, item)								\
+#define __stg_vecputend(vec, item)										\
 	((vec)->items[(vec)->header.start_index + __stg_vecsize((vec))] = (item), (vec)->header.end_index++, 1)
 
 #define stg_vecdef(item_type, type_name)		\
@@ -48,8 +48,8 @@ typedef struct {
 		? (free((vec)->items), (vec)->items = NULL, 1)	\
 		: 0
 
-#define stg_remlast(vec, dest)										\
-	(((vec) && (vec)->size > 0) ? (((vec)->size), (*(dest) = (vec)->items[--(vec)->size]) 1) : 0)	\
+#define stg_vecremlast(vec, dest)										\
+	(((vec) && __stg_vecsize((vec)) > 0) ? (*(dest) = (vec)->items[--(vec)->header.end_index], 1) : 0)	\
 
 #ifdef STG_DS_IMPL
 

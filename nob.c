@@ -29,7 +29,11 @@ int main(int argc, char** argv) {
 
 	Nob_Cmd test_run_cmd = {0};
 
-	nob_cmd_append(&test_run_cmd, "./tests");
+	nob_cmd_append(
+		&test_run_cmd,
+		"valgrind",
+		"./tests",
+	);
 
 	if (nob_cmd_run(&test_run_cmd))
 		return 0;

@@ -8,17 +8,21 @@ stg_vecdef(int, Numbers);
 
 stg_vecdef(char, Characters);
 
+#define newnums(name, initial_capacity)			\
+	Numbers (name) = {0};				\
+	stg_vecalloc(&(name), (initial_capacity))
+
+#define getinto(name, index, dest)		\
+	int (dest) = -1;		\
+	stg_vecget((name), index, &(dest))	
+
 Test(with_one_element, writes_element)
 {
-	Numbers numbers = {0};
-
-	stg_vecalloc(&numbers, 256);
-
-	int val = - 1;
+	newnums(numbers, 256);
 
 	stg_vecpush(&numbers, 10);
 
-	stg_vecget(&numbers, 0, &val);
+	getinto(&numbers, 0, val);
 
 	cr_assert_eq(val, 10, "Actual value was %d", val);
 
@@ -27,16 +31,12 @@ Test(with_one_element, writes_element)
 
 Test(with_two_elements, writes_element)
 {
-	Numbers numbers = {0};
-
-	stg_vecalloc(&numbers, 256);
+	newnums(numbers, 256);
 
 	stg_vecpush(&numbers, 10);
 	stg_vecpush(&numbers, 20);
 
-	int val = - 1;
-
-	stg_vecget(&numbers, 1, &val);
+	getinto(&numbers, 1, val);
 
 	cr_assert_eq(val, 20, "Actual value was %d", val);
 
@@ -45,11 +45,9 @@ Test(with_two_elements, writes_element)
 
 Test(with_no_elements, returns_false)
 {
-	Numbers numbers = {0};
+	newnums(numbers, 256);
 
-	stg_vecalloc(&numbers, 256);
-
-	int val = -1;
+	getinto(&numbers, 1, val);
 
 	int ret = stg_vecget(&numbers, 1, &val);
 
@@ -58,10 +56,34 @@ Test(with_no_elements, returns_false)
 	stg_vecfree(&numbers);
 }
 
-/*
-Test(with_one_element, removes_last)
+Test(with_one_element, returns_true_for_remove_last)
 {
+	newnums(numbers, 256);
 
+	stg_vecpush(&numbers, 42);
+
+	int val = -1;
+
+	int ret = stg_vecremlast(&numbers, &val);
+
+	cr_assert(ret, "Actual return value was %d", ret);
+
+	stg_vecfree(&numbers);
 }
 
-*/
+Test(with_one_element, writes_last_value_with_remove_last)
+{
+	newnums(numbers, 256);
+
+	stg_vecpush(&numbers, 42);
+
+	int val = -1;
+
+	stg_vecremlast(&numbers, &val);
+
+	cr_assert_eq(val, 42, "Actual written value was %d", val);
+
+	stg_vecfree(&numbers);
+}
+
+#undef newnums
