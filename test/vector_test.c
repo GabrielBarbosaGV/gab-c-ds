@@ -1,4 +1,6 @@
 #include <criterion/criterion.h>
+#include <criterion/internal/assert.h>
+#include <criterion/logging.h>
 
 #define STG_DS_IMPL
 
@@ -115,12 +117,59 @@ Test(with_one_element, increases_capacity)
 
 Test(with_two_elements, increases_capacity)
 {
-	newnums(numbers, 1);
+	newnums(numbers, 0);
 
 	stg_vecpush(&numbers, 100);
 	stg_vecpush(&numbers, 200);
 
 	cr_assert_eq(stg_vecgetcap(&numbers), 2, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_three_elements, doubles_capacity)
+{
+	newnums(numbers, 0);
+
+	stg_vecpush(&numbers, 1);
+	stg_vecpush(&numbers, 2);
+	stg_vecpush(&numbers, 3);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 4, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_five_elements, doubles_capacity)
+{
+	newnums(numbers, 0);
+
+	stg_vecpush(&numbers, 1);
+	stg_vecpush(&numbers, 2);
+	stg_vecpush(&numbers, 3);
+	stg_vecpush(&numbers, 4);
+	stg_vecpush(&numbers, 5);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 8, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+
+	stg_vecfree(&numbers);
+}
+
+Test(with_five_elements, shrinks)
+{
+	newnums(numbers, 0);
+
+	stg_vecpush(&numbers, 1);
+	stg_vecpush(&numbers, 2);
+	stg_vecpush(&numbers, 3);
+	stg_vecpush(&numbers, 4);
+	stg_vecpush(&numbers, 5);
+
+	reminto(&numbers, dest0);
+	reminto(&numbers, dest1);
+	reminto(&numbers, dest2);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 4, "Actual capacity was %ld", stg_vecgetcap(&numbers));
 
 	stg_vecfree(&numbers);
 }

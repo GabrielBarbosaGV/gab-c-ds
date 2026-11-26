@@ -11,26 +11,26 @@ typedef struct {
 } VecHeader;
 
 #define __stg_vecsize(vec)					\
-	((vec)->header.end_index - (vec)->header.start_index)	\
+	((vec)->header.end_index - (vec)->header.start_index)
 
 #define __stg_vecrelocate(vec)													\
-	(memmove((vec)->items, (vec)->items + (vec)->header.start_index, sizeof(*(vec)->items) * __stg_vecsize((vec))), 1)	\
+	(memmove((vec)->items, (vec)->items + (vec)->header.start_index, sizeof(*(vec)->items) * __stg_vecsize((vec))), 1)
 
 #define __stg_vecgrow(vec) (																\
-	(vec)->items = realloc((vec)->items, __stg_vecsize((vec)) > 0 ? sizeof(*(vec)->items) * __stg_vecsize((vec)) * 2 : sizeof(*(vec)->items)),	\
+	(vec)->items = realloc((vec)->items, (vec)->header.capacity > 0 ? sizeof(*(vec)->items) * (vec)->header.capacity * 2 : sizeof(*(vec)->items)),	\
 			(vec)->header.end_index = __stg_vecsize((vec)),											\
 			(vec)->header.start_index = 0,													\
-			(vec)->header.capacity = 0 != (vec)->header.capacity ? __stg_vecsize((vec)) * 2 : 1,						\
+			(vec)->header.capacity = 0 != (vec)->header.capacity ? (vec)->header.capacity * 2 : 1,						\
 			1																\
 )
 
 #define __stg_vecputend(vec, item)				\
 	((vec)->items[(vec)->header.end_index++] = (item), 1)
 
-#define stg_vecdef(item_type, type_name)		\
-	typedef struct {				\
-		VecHeader header;			\
-		item_type *items;			\
+#define stg_vecdef(item_type, type_name)	\
+	typedef struct {			\
+		VecHeader header;		\
+		item_type *items;		\
 	} type_name
 
 #define stg_vecget(vec, index, dest)				\
@@ -52,8 +52,13 @@ typedef struct {
 		? (free((vec)->items), (vec)->items = NULL, 1)	\
 		: 0
 
-#define stg_vecremlast(vec, dest)										\
-	(((vec) && __stg_vecsize((vec)) > 0) ? (*(dest) = (vec)->items[--(vec)->header.end_index], 1) : 0)	\
+#define __stg_vechalve(vec)												\
+	((vec) && (((vec)->items = realloc((vec)->items, sizeof(*(vec)->items) * (vec)->header.capacity / 2), 1)))
+
+#define stg_vecremlast(vec, dest) (												\
+	((vec) && __stg_vecsize((vec)) > 0) ? *(dest) = (vec)->items[--(vec)->header.end_index] : 0,				\
+	((vec) && __stg_vecsize((vec)) < (vec)->header.capacity / 2 ? (__stg_vechalve((vec)), (vec)->header.capacity /= 2, 1) : 0)	\
+)
 
 #define stg_vecgetcap(vec)			\
 	((vec) ? (vec)->header.capacity : -1)	
