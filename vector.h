@@ -55,8 +55,8 @@ typedef struct {
 #define __stg_vechalve(vec)												\
 	((vec) && (((vec)->items = realloc((vec)->items, sizeof(*(vec)->items) * (vec)->header.capacity / 2), 1)))
 
-#define stg_vecremlast(vec, dest) (												\
-	((vec) && __stg_vecsize((vec)) > 0) ? *(dest) = (vec)->items[--(vec)->header.end_index] : 0,				\
+#define stg_vecremlast(vec, dest) (													\
+	((vec) && __stg_vecsize((vec)) > 0) ? *(dest) = (vec)->items[--(vec)->header.end_index] : 0,					\
 	((vec) && __stg_vecsize((vec)) < (vec)->header.capacity / 2 ? (__stg_vechalve((vec)), (vec)->header.capacity /= 2, 1) : 0)	\
 )
 
