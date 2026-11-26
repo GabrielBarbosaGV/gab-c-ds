@@ -22,7 +22,7 @@ stg_vecdef(char, Characters);
 	int (dest) = -1;		\
 	stg_vecremlast((name), &(dest))
 
-Test(with_one_element, writes_element)
+Test(writes_element, with_one_element)
 {
 	newnums(numbers, 256);
 
@@ -35,7 +35,7 @@ Test(with_one_element, writes_element)
 	stg_vecfree(&numbers);
 }
 
-Test(with_two_elements, writes_element)
+Test(writes_element, with_two_elements)
 {
 	newnums(numbers, 256);
 
@@ -49,7 +49,7 @@ Test(with_two_elements, writes_element)
 	stg_vecfree(&numbers);
 }
 
-Test(with_no_elements, returns_false)
+Test(returns_false, with_no_elements)
 {
 	newnums(numbers, 256);
 
@@ -62,7 +62,7 @@ Test(with_no_elements, returns_false)
 	stg_vecfree(&numbers);
 }
 
-Test(with_one_element, returns_true_for_remove_last)
+Test(returns_true_for_remove_last, with_one_element)
 {
 	newnums(numbers, 256);
 
@@ -77,7 +77,7 @@ Test(with_one_element, returns_true_for_remove_last)
 	stg_vecfree(&numbers);
 }
 
-Test(with_one_element, writes_last_value_with_remove_last)
+Test(writes_last_value_with_remove_last, with_one_element)
 {
 	newnums(numbers, 256);
 
@@ -90,7 +90,7 @@ Test(with_one_element, writes_last_value_with_remove_last)
 	stg_vecfree(&numbers);
 }
 
-Test(with_two_elements, writes_last_value_with_remove_last)
+Test(writes_last_value_with_remove_last, with_two_elements)
 {
 	newnums(numbers, 256);
 
@@ -104,7 +104,7 @@ Test(with_two_elements, writes_last_value_with_remove_last)
 	stg_vecfree(&numbers);
 }
 
-Test(with_one_element, increases_capacity)
+Test(increases_capacity, with_one_element)
 {
 	newnums(numbers, 0);
 
@@ -115,7 +115,7 @@ Test(with_one_element, increases_capacity)
 	stg_vecfree(&numbers);
 }
 
-Test(with_two_elements, increases_capacity)
+Test(increases_capacity, with_two_elements)
 {
 	newnums(numbers, 0);
 
@@ -127,7 +127,7 @@ Test(with_two_elements, increases_capacity)
 	stg_vecfree(&numbers);
 }
 
-Test(with_three_elements, doubles_capacity)
+Test(doubles_capacity, with_three_elements)
 {
 	newnums(numbers, 0);
 
@@ -140,7 +140,7 @@ Test(with_three_elements, doubles_capacity)
 	stg_vecfree(&numbers);
 }
 
-Test(with_five_elements, doubles_capacity)
+Test(doubles_capacity, with_five_elements)
 {
 	newnums(numbers, 0);
 
@@ -155,7 +155,7 @@ Test(with_five_elements, doubles_capacity)
 	stg_vecfree(&numbers);
 }
 
-Test(with_five_elements, shrinks)
+Test(shrinks, with_five_elements)
 {
 	newnums(numbers, 0);
 
