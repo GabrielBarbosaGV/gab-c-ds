@@ -56,12 +56,19 @@ typedef struct {
 	((vec) && (((vec)->items = realloc((vec)->items, sizeof(*(vec)->items) * (vec)->header.capacity / 2), 1)))
 
 #define stg_vecremlast(vec, dest) (													\
-	((vec) && __stg_vecsize((vec)) > 0) ? *(dest) = (vec)->items[--(vec)->header.end_index] : 0,					\
+	((vec) && __stg_vecsize((vec)) > 0) ? (*(dest) = (vec)->items[--(vec)->header.end_index], 1) : 0,					\
 	((vec) && __stg_vecsize((vec)) < (vec)->header.capacity / 2 ? (__stg_vechalve((vec)), (vec)->header.capacity /= 2, 1) : 0)	\
 )
 
 #define stg_vecgetcap(vec)			\
 	((vec) ? (vec)->header.capacity : -1)	
+
+#define stg_vecpop(vec, dest) (											\
+	((vec) && __stg_vecsize((vec)) > 0 ? (*(dest) = (vec)->items[(vec)->header.start_index++], 1) : 0),		\
+	((vec) && __stg_vecsize((vec)) < (vec)->header.capacity / 2						\
+		? (__stg_vecrelocate((vec)), __stg_vechalve((vec)), (vec)->header.capacity /= 2, 1)		\
+		: 0)												\
+)
 
 #ifdef STG_DS_IMPL
 

@@ -1,6 +1,7 @@
 #include <criterion/criterion.h>
 #include <criterion/internal/assert.h>
 #include <criterion/logging.h>
+#include <stddef.h>
 
 #define STG_DS_IMPL
 
@@ -21,6 +22,10 @@ stg_vecdef(char, Characters);
 #define reminto(name, dest)		\
 	int (dest) = -1;		\
 	stg_vecremlast((name), &(dest))
+
+#define popinto(name, dest)		\
+	int (dest) = -1;		\
+	stg_vecpop((name), &(dest))
 
 Test(writes_element, with_one_element)
 {
@@ -46,6 +51,33 @@ Test(writes_element, with_two_elements)
 
 	cr_assert_eq(val, 20, "Actual value was %d", val);
 
+	stg_vecfree(&numbers);
+}
+
+Test(pop_writes_element, with_one_element)
+{
+	newnums(numbers, 1);
+
+	stg_vecpush(&numbers, 10);
+
+	popinto(&numbers, dest);
+
+	cr_assert_eq(dest, 10, "Actual value was %d", dest);
+
+	stg_vecfree(&numbers);
+}
+
+Test(pop_writes_element, with_two_elements)
+{
+	newnums(numbers, 1);
+
+	stg_vecpush(&numbers, 10);
+	stg_vecpush(&numbers, 20);
+
+	popinto(&numbers, dest);
+
+	cr_assert_eq(dest, 10, "Actual value was %d", dest);
+	
 	stg_vecfree(&numbers);
 }
 
@@ -174,8 +206,29 @@ Test(shrinks, with_five_elements)
 	stg_vecfree(&numbers);
 }
 
+Test(shrinks_front, with_eight_elements)
+{
+	newnums(numbers, 0);
+
+	for (int i = 0; i < 8; i++)
+		stg_vecpush(&numbers, i);
+
+	reminto(&numbers, dest0);
+	reminto(&numbers, dest1);
+	reminto(&numbers, dest2);
+	reminto(&numbers, dest3);
+	reminto(&numbers, dest4);
+	reminto(&numbers, dest5);
+
+	cr_assert_eq(stg_vecgetcap(&numbers), 4, "Actual capacity was %ld", stg_vecgetcap(&numbers));
+	
+	stg_vecfree(&numbers);
+}
+
 #undef newnums
 
 #undef getinto
 
 #undef reminto
+
+#undef popinto
